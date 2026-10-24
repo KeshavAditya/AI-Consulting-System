@@ -1,0 +1,613 @@
+{
+  "version": "0.1",
+  "format": "project CSV contract (not JSON Schema)",
+  "primary_key": "id",
+  "tables": {
+    "projects": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Canonical project ID.",
+          "nullable": false
+        },
+        {
+          "name": "client_id",
+          "type": "id",
+          "description": "Canonical customer ID; repeated across projects only for the same customer.",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "description": "Display name, never a matching key.",
+          "nullable": false
+        },
+        {
+          "name": "billing_model",
+          "type": "enum",
+          "description": "Determines pricing and billing semantics.",
+          "nullable": false,
+          "enum": [
+            "hourly",
+            "fixed_fee"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "description": "Only completed-project margin fixtures in this version.",
+          "nullable": false,
+          "enum": [
+            "completed"
+          ]
+        },
+        {
+          "name": "start_date",
+          "type": "date",
+          "description": "Beginning of complete project coverage.",
+          "nullable": false
+        },
+        {
+          "name": "completed_date",
+          "type": "date",
+          "description": "Confirmed completion date.",
+          "nullable": false
+        },
+        {
+          "name": "currency",
+          "type": "enum",
+          "description": "Currency of all amounts on this row; USD only in v0.1.",
+          "nullable": false,
+          "enum": [
+            "USD"
+          ]
+        },
+        {
+          "name": "agreed_fee",
+          "type": "money",
+          "description": "Agreed pre-tax fixed fee; blank for hourly.",
+          "nullable": true
+        },
+        {
+          "name": "budget_hours",
+          "type": "decimal",
+          "description": "Approved original total hours budget.",
+          "nullable": false
+        },
+        {
+          "name": "budget_cost",
+          "type": "money",
+          "description": "Approved direct delivery cost budget, including expenses.",
+          "nullable": false
+        },
+        {
+          "name": "agreement_ref",
+          "type": "evidence",
+          "description": "Confirmed agreement passage; relative Markdown path and anchor.",
+          "nullable": false
+        }
+      ]
+    },
+    "people": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Pseudonymous worker ID.",
+          "nullable": false
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "description": "Delivery role; no salary or personal contact information.",
+          "nullable": false
+        }
+      ]
+    },
+    "cost_rates": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Rate period ID.",
+          "nullable": false
+        },
+        {
+          "name": "person_id",
+          "type": "id",
+          "description": "Worker.",
+          "nullable": false,
+          "references": "people"
+        },
+        {
+          "name": "valid_from",
+          "type": "date",
+          "description": "Inclusive effective date.",
+          "nullable": false
+        },
+        {
+          "name": "valid_to",
+          "type": "date",
+          "description": "Exclusive effective date; blank is open-ended.",
+          "nullable": true
+        },
+        {
+          "name": "hourly_cost",
+          "type": "decimal",
+          "description": "Loaded direct labor cost rate; not selling rate.",
+          "nullable": false
+        },
+        {
+          "name": "currency",
+          "type": "enum",
+          "description": "Currency of all amounts on this row; USD only in v0.1.",
+          "nullable": false,
+          "enum": [
+            "USD"
+          ]
+        }
+      ]
+    },
+    "time_entries": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Stable canonical time-entry ID.",
+          "nullable": false
+        },
+        {
+          "name": "project_id",
+          "type": "id",
+          "description": "Project.",
+          "nullable": false,
+          "references": "projects"
+        },
+        {
+          "name": "person_id",
+          "type": "id",
+          "description": "Worker.",
+          "nullable": false,
+          "references": "people"
+        },
+        {
+          "name": "work_date",
+          "type": "date",
+          "description": "Business date worked.",
+          "nullable": false
+        },
+        {
+          "name": "task",
+          "type": "text",
+          "description": "Work description; untrusted document content in future runtime.",
+          "nullable": false
+        },
+        {
+          "name": "hours",
+          "type": "decimal",
+          "description": "Recorded hours used for cost.",
+          "nullable": false
+        },
+        {
+          "name": "billing_hours",
+          "type": "decimal",
+          "description": "Hours after agreed billing rounding; used for priced work.",
+          "nullable": false
+        },
+        {
+          "name": "billable",
+          "type": "boolean",
+          "description": "Whether work is marked billable.",
+          "nullable": false
+        },
+        {
+          "name": "approval_status",
+          "type": "enum",
+          "description": "Agency billing review status.",
+          "nullable": false,
+          "enum": [
+            "approved",
+            "pending",
+            "rejected"
+          ]
+        },
+        {
+          "name": "approved_on",
+          "type": "date",
+          "description": "Date approved; required only for approved entries.",
+          "nullable": true
+        },
+        {
+          "name": "billing_rate",
+          "type": "decimal",
+          "description": "Confirmed historical hourly selling rate; blank for fixed-fee work.",
+          "nullable": true
+        },
+        {
+          "name": "invoiced_flag",
+          "type": "boolean",
+          "description": "Source-system hint; not authoritative invoice coverage.",
+          "nullable": false
+        },
+        {
+          "name": "source_ref",
+          "type": "text",
+          "description": "Synthetic source namespace and record ID; replace with immutable import provenance later.",
+          "nullable": false
+        }
+      ]
+    },
+    "expenses": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Direct expense ID.",
+          "nullable": false
+        },
+        {
+          "name": "project_id",
+          "type": "id",
+          "description": "Project.",
+          "nullable": false,
+          "references": "projects"
+        },
+        {
+          "name": "incurred_on",
+          "type": "date",
+          "description": "Date cost incurred.",
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "money",
+          "description": "Direct cost excluding recoverable taxes; no markup.",
+          "nullable": false
+        },
+        {
+          "name": "currency",
+          "type": "enum",
+          "description": "Currency of all amounts on this row; USD only in v0.1.",
+          "nullable": false,
+          "enum": [
+            "USD"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "description": "Cost description; no automatic rebilling of expenses in v0.1.",
+          "nullable": false
+        }
+      ]
+    },
+    "invoices": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Canonical invoice ID.",
+          "nullable": false
+        },
+        {
+          "name": "client_id",
+          "type": "id",
+          "description": "Customer matching the invoice line project.",
+          "nullable": false
+        },
+        {
+          "name": "issued_on",
+          "type": "date",
+          "description": "Invoice date; status history outside this fixture contract.",
+          "nullable": false
+        },
+        {
+          "name": "due_on",
+          "type": "date",
+          "description": "Agreed payment due date.",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "description": "Only issued invoices establish balances/coverage.",
+          "nullable": false,
+          "enum": [
+            "issued",
+            "draft",
+            "void"
+          ]
+        },
+        {
+          "name": "currency",
+          "type": "enum",
+          "description": "Currency of all amounts on this row; USD only in v0.1.",
+          "nullable": false,
+          "enum": [
+            "USD"
+          ]
+        },
+        {
+          "name": "subtotal",
+          "type": "money",
+          "description": "Total before supplied tax; sum of invoice lines.",
+          "nullable": false
+        },
+        {
+          "name": "tax",
+          "type": "money",
+          "description": "Supplied tax, not computed by this tool.",
+          "nullable": false
+        },
+        {
+          "name": "total",
+          "type": "money",
+          "description": "Subtotal plus supplied tax.",
+          "nullable": false
+        },
+        {
+          "name": "disputed",
+          "type": "boolean",
+          "description": "Requires review before collection action.",
+          "nullable": false
+        },
+        {
+          "name": "source_ref",
+          "type": "text",
+          "description": "Original invoice system and immutable identifier.",
+          "nullable": false
+        }
+      ]
+    },
+    "invoice_lines": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Invoice line ID.",
+          "nullable": false
+        },
+        {
+          "name": "invoice_id",
+          "type": "id",
+          "description": "Invoice.",
+          "nullable": false,
+          "references": "invoices"
+        },
+        {
+          "name": "project_id",
+          "type": "id",
+          "description": "Project; one project per invoice in v0.1.",
+          "nullable": false,
+          "references": "projects"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "description": "Line description.",
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "money",
+          "description": "Pre-tax net line amount after any source discount.",
+          "nullable": false
+        }
+      ]
+    },
+    "billing_links": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Confirmed invoice-coverage link ID.",
+          "nullable": false
+        },
+        {
+          "name": "time_entry_id",
+          "type": "id",
+          "description": "Covered time entry.",
+          "nullable": false,
+          "references": "time_entries"
+        },
+        {
+          "name": "invoice_line_id",
+          "type": "id",
+          "description": "Covering line.",
+          "nullable": false,
+          "references": "invoice_lines"
+        },
+        {
+          "name": "covered_hours",
+          "type": "decimal",
+          "description": "Covered billing hours, not necessarily recorded hours.",
+          "nullable": false
+        },
+        {
+          "name": "confirmed_on",
+          "type": "date",
+          "description": "When a human/source confirmed the link.",
+          "nullable": false
+        },
+        {
+          "name": "evidence_ref",
+          "type": "evidence",
+          "description": "Specific support for this link; never inferred from an amount alone.",
+          "nullable": false
+        }
+      ]
+    },
+    "payments": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Customer cash receipt ID.",
+          "nullable": false
+        },
+        {
+          "name": "client_id",
+          "type": "id",
+          "description": "Customer.",
+          "nullable": false
+        },
+        {
+          "name": "received_on",
+          "type": "date",
+          "description": "Date funds were received.",
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "money",
+          "description": "Gross customer payment; processing fees not netted.",
+          "nullable": false
+        },
+        {
+          "name": "currency",
+          "type": "enum",
+          "description": "Currency of all amounts on this row; USD only in v0.1.",
+          "nullable": false,
+          "enum": [
+            "USD"
+          ]
+        }
+      ]
+    },
+    "payment_allocations": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Allocation event ID.",
+          "nullable": false
+        },
+        {
+          "name": "payment_id",
+          "type": "id",
+          "description": "Payment.",
+          "nullable": false,
+          "references": "payments"
+        },
+        {
+          "name": "invoice_id",
+          "type": "id",
+          "description": "Invoice.",
+          "nullable": false,
+          "references": "invoices"
+        },
+        {
+          "name": "applied_on",
+          "type": "date",
+          "description": "Allocation date, on/after payment receipt and invoice issue.",
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "money",
+          "description": "Amount of the payment applied to this invoice.",
+          "nullable": false
+        }
+      ]
+    },
+    "credits": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Issued credit memo ID; no delayed credits.",
+          "nullable": false
+        },
+        {
+          "name": "client_id",
+          "type": "id",
+          "description": "Customer.",
+          "nullable": false
+        },
+        {
+          "name": "project_id",
+          "type": "id",
+          "description": "Confirmed project whose pricing basis is reduced.",
+          "nullable": false,
+          "references": "projects"
+        },
+        {
+          "name": "issued_on",
+          "type": "date",
+          "description": "Credit issue date.",
+          "nullable": false
+        },
+        {
+          "name": "subtotal",
+          "type": "money",
+          "description": "Pre-tax price reduction attributed to the project.",
+          "nullable": false
+        },
+        {
+          "name": "tax",
+          "type": "money",
+          "description": "Tax component supplied by source.",
+          "nullable": false
+        },
+        {
+          "name": "total",
+          "type": "money",
+          "description": "Subtotal plus tax.",
+          "nullable": false
+        },
+        {
+          "name": "currency",
+          "type": "enum",
+          "description": "Currency of all amounts on this row; USD only in v0.1.",
+          "nullable": false,
+          "enum": [
+            "USD"
+          ]
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "description": "Reason for credit; does not imply payment.",
+          "nullable": false
+        }
+      ]
+    },
+    "credit_allocations": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "id",
+          "description": "Credit application ID.",
+          "nullable": false
+        },
+        {
+          "name": "credit_id",
+          "type": "id",
+          "description": "Credit memo.",
+          "nullable": false,
+          "references": "credits"
+        },
+        {
+          "name": "invoice_id",
+          "type": "id",
+          "description": "Invoice.",
+          "nullable": false,
+          "references": "invoices"
+        },
+        {
+          "name": "applied_on",
+          "type": "date",
+          "description": "Application date, on/after credit and invoice issue.",
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "money",
+          "description": "Gross credit applied to the invoice.",
+          "nullable": false
+        }
+      ]
+    }
+  }
+}

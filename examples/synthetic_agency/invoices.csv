@@ -1,0 +1,7 @@
+id,client_id,issued_on,due_on,status,currency,subtotal,tax,total,disputed,source_ref
+I01,C01,2026-09-08,2026-09-22,issued,USD,4000.00,0.00,4000.00,false,fictional-billing:I01
+I02,C02,2026-09-11,2026-09-25,issued,USD,4800.00,0.00,4800.00,false,fictional-billing:I02
+I03,C03,2026-09-08,2026-09-22,issued,USD,4500.00,0.00,4500.00,false,fictional-external-accounting:EXT-303
+I04A,C04,2026-09-01,2026-09-08,issued,USD,8000.00,0.00,8000.00,false,fictional-billing:I04A
+I04B,C04,2026-09-28,2026-10-12,issued,USD,12000.00,0.00,12000.00,false,fictional-billing:I04B
+I05,C05,2026-09-10,2026-09-15,issued,USD,10000.00,0.00,10000.00,false,fictional-billing:I05

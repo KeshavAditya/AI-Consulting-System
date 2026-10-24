@@ -1,0 +1,174 @@
+{
+  "as_of": "2026-09-30",
+  "purpose": "Hand-worked development oracle. Never provide this file or docs/example-cases.md to a model being evaluated.",
+  "projects": {
+    "P01": {
+      "hours": "40.00",
+      "labor_cost": "2000.00",
+      "direct_expenses": "200.00",
+      "delivery_cost": "2200.00",
+      "approved_hourly_value": "4000.00",
+      "pricing_basis": "4000.00",
+      "delivery_margin_pct": "45.00",
+      "uninvoiced_hourly_candidate": "0.00",
+      "billed_ex_tax": "4000.00",
+      "allocated_cash": "4000.00",
+      "balance": "0.00",
+      "overdue_balance": "0.00",
+      "max_days_overdue": 0,
+      "cost_variance": "0.00"
+    },
+    "P02": {
+      "hours": "50.00",
+      "labor_cost": "3000.00",
+      "direct_expenses": "0.00",
+      "delivery_cost": "3000.00",
+      "approved_hourly_value": "6000.00",
+      "pricing_basis": "6000.00",
+      "delivery_margin_pct": "50.00",
+      "uninvoiced_hourly_candidate": "1200.00",
+      "billed_ex_tax": "4800.00",
+      "allocated_cash": "4800.00",
+      "balance": "0.00",
+      "overdue_balance": "0.00",
+      "max_days_overdue": 0,
+      "cost_variance": "0.00"
+    },
+    "P03": {
+      "hours": "30.00",
+      "labor_cost": "2100.00",
+      "direct_expenses": "0.00",
+      "delivery_cost": "2100.00",
+      "approved_hourly_value": "4500.00",
+      "pricing_basis": "4500.00",
+      "delivery_margin_pct": "53.33",
+      "uninvoiced_hourly_candidate": "0.00",
+      "billed_ex_tax": "4500.00",
+      "allocated_cash": "4500.00",
+      "balance": "0.00",
+      "overdue_balance": "0.00",
+      "max_days_overdue": 0,
+      "cost_variance": "0.00"
+    },
+    "P04": {
+      "hours": "280.00",
+      "labor_cost": "14000.00",
+      "direct_expenses": "0.00",
+      "delivery_cost": "14000.00",
+      "approved_hourly_value": null,
+      "pricing_basis": "20000.00",
+      "delivery_margin_pct": "30.00",
+      "uninvoiced_hourly_candidate": null,
+      "billed_ex_tax": "20000.00",
+      "allocated_cash": "20000.00",
+      "balance": "0.00",
+      "overdue_balance": "0.00",
+      "max_days_overdue": 0,
+      "cost_variance": "4000.00"
+    },
+    "P05": {
+      "hours": "50.00",
+      "labor_cost": "4000.00",
+      "direct_expenses": "0.00",
+      "delivery_cost": "4000.00",
+      "approved_hourly_value": "10000.00",
+      "pricing_basis": "9000.00",
+      "delivery_margin_pct": "55.56",
+      "uninvoiced_hourly_candidate": "0.00",
+      "billed_ex_tax": "10000.00",
+      "allocated_cash": "4000.00",
+      "balance": "5000.00",
+      "overdue_balance": "5000.00",
+      "max_days_overdue": 15,
+      "cost_variance": "0.00"
+    }
+  },
+  "narrative_expectations": [
+    {
+      "project_id": "P01",
+      "finding_type": "none",
+      "must_say": [
+        "No supported billing or overdue exception in these complete records."
+      ],
+      "must_not_say": [
+        "Every project must have an improvement opportunity."
+      ],
+      "evidence": [
+        "projects.csv#P01",
+        "invoice_lines.csv#L01",
+        "payment_allocations.csv#PA01"
+      ]
+    },
+    {
+      "project_id": "P02",
+      "finding_type": "billing_candidate",
+      "must_say": [
+        "10 approved billing hours at 120 USD/hour have no confirmed invoice coverage; 1200 USD candidate for review.",
+        "This is not cash already recovered."
+      ],
+      "must_not_say": [
+        "The client already owes an overdue 1200 USD invoice."
+      ],
+      "evidence": [
+        "time_entries.csv#T02-06",
+        "time_entries.csv#T02-07",
+        "agreements.md#p02",
+        "review-notes.md#p02-billing"
+      ]
+    },
+    {
+      "project_id": "P03",
+      "finding_type": "reconciliation",
+      "must_say": [
+        "Existing external invoice covers all 30 hours despite false invoiced flags.",
+        "Reconcile the time system; do not create another invoice."
+      ],
+      "must_not_say": [
+        "4500 USD revenue was missed."
+      ],
+      "evidence": [
+        "invoices.csv#I03",
+        "billing_links.csv#B-T03-01",
+        "review-notes.md#p03-billing"
+      ]
+    },
+    {
+      "project_id": "P04",
+      "finding_type": "cost_overrun",
+      "must_say": [
+        "80 hours and 4000 USD over the agreed cost budget; delivery margin is 30 percent before overhead.",
+        "Determine whether extra revisions were scope changes or rework; the records do not establish causation."
+      ],
+      "must_not_say": [
+        "Bill the client 4000 USD automatically.",
+        "Scope creep definitely caused the overrun."
+      ],
+      "evidence": [
+        "projects.csv#P04",
+        "agreements.md#p04",
+        "review-notes.md#p04-review",
+        "time_entries.csv#T04A-20"
+      ]
+    },
+    {
+      "project_id": "P05",
+      "finding_type": "overdue_balance",
+      "must_say": [
+        "5000 USD remains due as of September 30 after 4000 USD received and 1000 USD credit; 15 days overdue.",
+        "The October 2 payment does not reduce the September 30 balance."
+      ],
+      "must_not_say": [
+        "The full 10000 USD is still owed.",
+        "The September balance is zero because of the October payment.",
+        "The credit is cash collected."
+      ],
+      "evidence": [
+        "invoices.csv#I05",
+        "payments.csv#PAY06",
+        "credits.csv#CR01",
+        "credit_allocations.csv#CA01",
+        "payments.csv#PAY07"
+      ]
+    }
+  ]
+}
