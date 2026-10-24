@@ -1,0 +1,65 @@
+id,project_id,person_id,work_date,task,hours,billing_hours,billable,approval_status,approved_on,billing_rate,invoiced_flag,source_ref
+T01-01,P01,E01,2026-09-01,Website maintenance,8,8,true,approved,2026-09-01,100,true,fictional-time:T01-01
+T01-02,P01,E01,2026-09-02,Website maintenance,8,8,true,approved,2026-09-02,100,true,fictional-time:T01-02
+T01-03,P01,E01,2026-09-03,Website maintenance,8,8,true,approved,2026-09-03,100,true,fictional-time:T01-03
+T01-04,P01,E01,2026-09-04,Website maintenance,8,8,true,approved,2026-09-04,100,true,fictional-time:T01-04
+T01-05,P01,E01,2026-09-07,Website maintenance,8,8,true,approved,2026-09-07,100,true,fictional-time:T01-05
+T02-01,P02,E02,2026-09-01,Approved integration delivery,8,8,true,approved,2026-09-01,120,true,fictional-time:T02-01
+T02-02,P02,E02,2026-09-02,Approved integration delivery,8,8,true,approved,2026-09-02,120,true,fictional-time:T02-02
+T02-03,P02,E02,2026-09-03,Approved integration delivery,8,8,true,approved,2026-09-03,120,true,fictional-time:T02-03
+T02-04,P02,E02,2026-09-04,Approved integration delivery,8,8,true,approved,2026-09-04,120,true,fictional-time:T02-04
+T02-05,P02,E02,2026-09-07,Approved integration delivery,8,8,true,approved,2026-09-07,120,true,fictional-time:T02-05
+T02-06,P02,E02,2026-09-08,Approved integration delivery,5,5,true,approved,2026-09-08,120,false,fictional-time:T02-06
+T02-07,P02,E02,2026-09-09,Approved integration delivery,5,5,true,approved,2026-09-09,120,false,fictional-time:T02-07
+T03-01,P03,E03,2026-09-01,Accessibility remediation,6,6,true,approved,2026-09-01,150,false,fictional-time:T03-01
+T03-02,P03,E03,2026-09-02,Accessibility remediation,6,6,true,approved,2026-09-02,150,false,fictional-time:T03-02
+T03-03,P03,E03,2026-09-03,Accessibility remediation,6,6,true,approved,2026-09-03,150,false,fictional-time:T03-03
+T03-04,P03,E03,2026-09-04,Accessibility remediation,6,6,true,approved,2026-09-04,150,false,fictional-time:T03-04
+T03-05,P03,E03,2026-09-07,Accessibility remediation,6,6,true,approved,2026-09-07,150,false,fictional-time:T03-05
+T04A-01,P04,E04,2026-09-01,Portal implementation,7,7,true,approved,2026-09-01,,false,fictional-time:T04A-01
+T04A-02,P04,E04,2026-09-02,Portal implementation,7,7,true,approved,2026-09-02,,false,fictional-time:T04A-02
+T04A-03,P04,E04,2026-09-03,Portal implementation,7,7,true,approved,2026-09-03,,false,fictional-time:T04A-03
+T04A-04,P04,E04,2026-09-04,Portal implementation,7,7,true,approved,2026-09-04,,false,fictional-time:T04A-04
+T04A-05,P04,E04,2026-09-07,Portal implementation,7,7,true,approved,2026-09-07,,false,fictional-time:T04A-05
+T04A-06,P04,E04,2026-09-08,Portal implementation,7,7,true,approved,2026-09-08,,false,fictional-time:T04A-06
+T04A-07,P04,E04,2026-09-09,Portal implementation,7,7,true,approved,2026-09-09,,false,fictional-time:T04A-07
+T04A-08,P04,E04,2026-09-10,Portal implementation,7,7,true,approved,2026-09-10,,false,fictional-time:T04A-08
+T04A-09,P04,E04,2026-09-11,Portal implementation,7,7,true,approved,2026-09-11,,false,fictional-time:T04A-09
+T04A-10,P04,E04,2026-09-14,Portal implementation,7,7,true,approved,2026-09-14,,false,fictional-time:T04A-10
+T04A-11,P04,E04,2026-09-15,Portal implementation,7,7,true,approved,2026-09-15,,false,fictional-time:T04A-11
+T04A-12,P04,E04,2026-09-16,Portal implementation,7,7,true,approved,2026-09-16,,false,fictional-time:T04A-12
+T04A-13,P04,E04,2026-09-17,Portal implementation,7,7,true,approved,2026-09-17,,false,fictional-time:T04A-13
+T04A-14,P04,E04,2026-09-18,Portal implementation,7,7,true,approved,2026-09-18,,false,fictional-time:T04A-14
+T04A-15,P04,E04,2026-09-21,Additional revisions; cause needs review,7,7,true,approved,2026-09-21,,false,fictional-time:T04A-15
+T04A-16,P04,E04,2026-09-22,Additional revisions; cause needs review,7,7,true,approved,2026-09-22,,false,fictional-time:T04A-16
+T04A-17,P04,E04,2026-09-23,Additional revisions; cause needs review,7,7,true,approved,2026-09-23,,false,fictional-time:T04A-17
+T04A-18,P04,E04,2026-09-24,Additional revisions; cause needs review,7,7,true,approved,2026-09-24,,false,fictional-time:T04A-18
+T04A-19,P04,E04,2026-09-25,Additional revisions; cause needs review,7,7,true,approved,2026-09-25,,false,fictional-time:T04A-19
+T04A-20,P04,E04,2026-09-28,Additional revisions; cause needs review,7,7,true,approved,2026-09-28,,false,fictional-time:T04A-20
+T04B-01,P04,E05,2026-09-01,Portal design,7,7,true,approved,2026-09-01,,false,fictional-time:T04B-01
+T04B-02,P04,E05,2026-09-02,Portal design,7,7,true,approved,2026-09-02,,false,fictional-time:T04B-02
+T04B-03,P04,E05,2026-09-03,Portal design,7,7,true,approved,2026-09-03,,false,fictional-time:T04B-03
+T04B-04,P04,E05,2026-09-04,Portal design,7,7,true,approved,2026-09-04,,false,fictional-time:T04B-04
+T04B-05,P04,E05,2026-09-07,Portal design,7,7,true,approved,2026-09-07,,false,fictional-time:T04B-05
+T04B-06,P04,E05,2026-09-08,Portal design,7,7,true,approved,2026-09-08,,false,fictional-time:T04B-06
+T04B-07,P04,E05,2026-09-09,Portal design,7,7,true,approved,2026-09-09,,false,fictional-time:T04B-07
+T04B-08,P04,E05,2026-09-10,Portal design,7,7,true,approved,2026-09-10,,false,fictional-time:T04B-08
+T04B-09,P04,E05,2026-09-11,Portal design,7,7,true,approved,2026-09-11,,false,fictional-time:T04B-09
+T04B-10,P04,E05,2026-09-14,Portal design,7,7,true,approved,2026-09-14,,false,fictional-time:T04B-10
+T04B-11,P04,E05,2026-09-15,Portal design,7,7,true,approved,2026-09-15,,false,fictional-time:T04B-11
+T04B-12,P04,E05,2026-09-16,Portal design,7,7,true,approved,2026-09-16,,false,fictional-time:T04B-12
+T04B-13,P04,E05,2026-09-17,Portal design,7,7,true,approved,2026-09-17,,false,fictional-time:T04B-13
+T04B-14,P04,E05,2026-09-18,Portal design,7,7,true,approved,2026-09-18,,false,fictional-time:T04B-14
+T04B-15,P04,E05,2026-09-21,Additional revisions; cause needs review,7,7,true,approved,2026-09-21,,false,fictional-time:T04B-15
+T04B-16,P04,E05,2026-09-22,Additional revisions; cause needs review,7,7,true,approved,2026-09-22,,false,fictional-time:T04B-16
+T04B-17,P04,E05,2026-09-23,Additional revisions; cause needs review,7,7,true,approved,2026-09-23,,false,fictional-time:T04B-17
+T04B-18,P04,E05,2026-09-24,Additional revisions; cause needs review,7,7,true,approved,2026-09-24,,false,fictional-time:T04B-18
+T04B-19,P04,E05,2026-09-25,Additional revisions; cause needs review,7,7,true,approved,2026-09-25,,false,fictional-time:T04B-19
+T04B-20,P04,E05,2026-09-28,Additional revisions; cause needs review,7,7,true,approved,2026-09-28,,false,fictional-time:T04B-20
+T05-01,P05,E06,2026-09-01,Analytics integration,8,8,true,approved,2026-09-01,200,true,fictional-time:T05-01
+T05-02,P05,E06,2026-09-02,Analytics integration,8,8,true,approved,2026-09-02,200,true,fictional-time:T05-02
+T05-03,P05,E06,2026-09-03,Analytics integration,8,8,true,approved,2026-09-03,200,true,fictional-time:T05-03
+T05-04,P05,E06,2026-09-04,Analytics integration,8,8,true,approved,2026-09-04,200,true,fictional-time:T05-04
+T05-05,P05,E06,2026-09-07,Analytics integration,8,8,true,approved,2026-09-07,200,true,fictional-time:T05-05
+T05-06,P05,E06,2026-09-08,Analytics integration,8,8,true,approved,2026-09-08,200,true,fictional-time:T05-06
+T05-07,P05,E06,2026-09-09,Analytics integration,2,2,true,approved,2026-09-09,200,true,fictional-time:T05-07

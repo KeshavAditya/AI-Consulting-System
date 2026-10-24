@@ -1,0 +1,36 @@
+{
+  "schema_version": "0.1",
+  "dataset_id": "fictional-agency-2026-09",
+  "synthetic": true,
+  "currency": "USD",
+  "as_of": "2026-09-30",
+  "coverage_start": "2026-09-01",
+  "coverage_end": "2026-09-30",
+  "tables": [
+    "projects",
+    "people",
+    "cost_rates",
+    "time_entries",
+    "expenses",
+    "invoices",
+    "invoice_lines",
+    "billing_links",
+    "payments",
+    "payment_allocations",
+    "credits",
+    "credit_allocations"
+  ],
+  "documents": [
+    "agreements.md",
+    "review-notes.md"
+  ],
+  "source_coverage": "All projects, recorded work, direct costs, issued invoices, payments and credits for the five cases are included through cutoff. One later payment is intentionally included to exercise cutoff handling.",
+  "rounding": "ROUND_HALF_UP; money per entry to cents; cost uses recorded hours; price uses billing_hours",
+  "assumptions": [
+    "All five projects completed and cost coverage complete at cutoff.",
+    "No invoice voiding, reversals, tax, discounts other than CR01, or unrecorded change orders.",
+    "Billing links are explicitly confirmed fictional review inputs, not model-inferred matches.",
+    "Credit CR01 reduces both P05 pricing basis and I05 balance in their separate calculations.",
+    "No guarantee that real vendor CSV exports match these canonical headers."
+  ]
+}

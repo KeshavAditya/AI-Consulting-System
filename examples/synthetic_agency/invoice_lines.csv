@@ -1,0 +1,7 @@
+id,invoice_id,project_id,description,amount
+L01,I01,P01,Hourly delivery,4000.00
+L02,I02,P02,Hourly delivery,4800.00
+L03,I03,P03,Hourly delivery,4500.00
+L04A,I04A,P04,Agreed milestone,8000.00
+L04B,I04B,P04,Agreed milestone,12000.00
+L05,I05,P05,Hourly delivery,10000.00

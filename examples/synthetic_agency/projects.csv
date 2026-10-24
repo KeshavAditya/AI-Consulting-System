@@ -1,0 +1,6 @@
+id,client_id,name,billing_model,status,start_date,completed_date,currency,agreed_fee,budget_hours,budget_cost,agreement_ref
+P01,C01,Healthy hourly website support,hourly,completed,2026-09-01,2026-09-07,USD,,40,2200.00,agreements.md#p01
+P02,C02,Omitted approved integration work,hourly,completed,2026-09-01,2026-09-10,USD,,50,3000.00,agreements.md#p02
+P03,C03,Externally invoiced accessibility work,hourly,completed,2026-09-01,2026-09-07,USD,,30,2100.00,agreements.md#p03
+P04,C04,Fixed-fee portal overrun,fixed_fee,completed,2026-09-01,2026-09-28,USD,20000.00,200,10000.00,agreements.md#p04
+P05,C05,Part-paid analytics delivery,hourly,completed,2026-09-01,2026-09-09,USD,,50,4000.00,agreements.md#p05

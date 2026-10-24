@@ -1,0 +1,2 @@
+id,project_id,incurred_on,amount,currency,description
+X01,P01,2026-09-04,200.00,USD,Project-specific test infrastructure; included in cost budget; not rebillable
