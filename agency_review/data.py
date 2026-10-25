@@ -85,6 +85,7 @@ class Bundle:
     row_locations: dict[str, dict] = field(default_factory=dict)
     documents: dict[str, str] = field(default_factory=dict)
     _indexes: dict[str, dict] = field(default_factory=dict, repr=False)
+    raw_inputs: dict[str, bytes] = field(default_factory=dict, repr=False)
 
     def index(self, table: str) -> dict[str, dict]:
         if table not in self._indexes:
@@ -138,10 +139,12 @@ def load_bundle(root: Path = DEFAULT_BUNDLE, *, synthetic_only: bool = False) ->
     contract_data = (ROOT / "schemas/csv-contract.json").read_bytes()
     contract = parse_json(contract_data)
     captured = {}
+    raw_inputs = {}
 
     def capture(name):
         data = read_bytes(root, name)
         captured[name] = hashlib.sha256(data).hexdigest()
+        raw_inputs[name] = data
         return data
 
     manifest = parse_json(capture("manifest.json"))
@@ -194,7 +197,9 @@ def load_bundle(root: Path = DEFAULT_BUNDLE, *, synthetic_only: bool = False) ->
                 locations[f"{name}.csv#{row['id']}"] = {"file": name + ".csv", "record": line, "id": row["id"]}
             tables[name] = rows
     captured["schema:csv-contract.json"] = hashlib.sha256(contract_data).hexdigest()
-    bundle = Bundle(root, manifest, tables, contract, captured, locations, documents)
+    raw_inputs["schema:csv-contract.json"] = contract_data
+    bundle = Bundle(root, manifest, tables, contract, captured, locations, documents,
+                    raw_inputs=raw_inputs)
     validate(bundle)
     return bundle
 
