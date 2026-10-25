@@ -21,3 +21,5 @@ Keep real client records and credentials outside version control. Synthetic exam
 The existing `main.py` predates this foundation and is unrelated. Any removal or relocation should be a separate, explicit change so its author can review it.
 
 Choose a fresh report output folder for each check. Keep the synthetic answer-key verifier separate from the report path; expected answers must never drive findings. When calculation or report behavior changes, update its version and relevant output-contract documentation. CI exercises Linux and Windows, but passing CI does not establish business-data completeness or real vendor compatibility.
+
+Keep commits focused on one responsibility with relevant tests and documentation. Saved-review changes must preserve existing reports and rule versions; test corruption, interrupted writes, and reopening without invoking current calculations. Never commit private stores or generated reports. See [storage.md](docs/storage.md) for the storage contract.

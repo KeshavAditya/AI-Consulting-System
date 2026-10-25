@@ -2,7 +2,7 @@
 
 A local, open-source project for reviewing agency project costs and billing records. It will connect recorded work, agreements, invoices, and payments to explain discrepancies with traceable evidence.
 
-**Current status: experimental CSV-to-report command plus the researched foundation.** It validates canonical records, calculates project metrics, and exports evidence-backed Markdown and JSON reports. There is no dashboard, model integration, or vendor importer yet. The existing root `main.py` is an unrelated WikiBacon prototype and is not the entry point for this project.
+**Current status: experimental CSV-to-report command plus the researched foundation.** It validates canonical records, calculates project metrics, exports evidence-backed Markdown and JSON reports, and can save reviews with their source inputs for later reopening. There is no dashboard, model integration, or vendor importer yet. The existing root `main.py` is an unrelated WikiBacon prototype and is not the entry point for this project.
 
 ## Start here
 
@@ -28,6 +28,21 @@ Open `outputs/demo-review/report.md` in VS Code and press **Ctrl+Shift+V** to pr
 The demonstration flags a USD 1,200 billing candidate, a USD 4,000 cost overrun, and a USD 5,000 overdue balance. These are different review categories, **not additive recoveries**. Explanations and next steps are deterministic rules; no LLM is running.
 
 See [CLI usage, input requirements, and output contract](docs/cli.md) before preparing your own records. Non-synthetic inputs require explicit completeness and supported-transaction assertions. This is an experimental developer-facing workflow, not a verified accounting integration.
+
+## Save and reopen a review
+
+```sh
+python -m agency_review save examples/synthetic_agency
+python -m agency_review list
+```
+
+Copy the full `review_id` from the output, then replace `REVIEW_ID` below:
+
+```sh
+python -m agency_review open REVIEW_ID --output outputs/reopened-review
+```
+
+Saved inputs and reports live under the Git-ignored `data/private/reviews/` folder by default. Reopening verifies the retained files and exports the original report without recalculation. Identical saves reuse the same review. Use a fresh output folder for each export. See [the CLI guide](docs/cli.md#save-and-reopen-reviews) for PowerShell commands and [storage behavior](docs/storage.md) for integrity checks and limitations.
 
 ## Verify the foundation
 

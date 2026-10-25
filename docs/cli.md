@@ -95,3 +95,38 @@ python -m unittest discover -s tests -v
 ```
 
 The original fixture checker remains synthetic-only and compares against hand-worked answers. It now calls the shared library used by reports, preventing two independent calculation implementations from drifting apart. The CLI tests exercise real subprocess execution, evidence/amounts, error handling, Windows-style paths, output collisions, and source-text escaping. CI includes Linux on Python 3.11–3.13 and Windows on Python 3.12; local testing alone does not establish CI success or production readiness.
+
+## Save and reopen reviews
+
+The new commands preserve the completed report and its consumed inputs under the Git-ignored `data/private/reviews/` directory by default. They do not change the original report-only command above.
+
+### Windows PowerShell example
+
+From the repository root:
+
+```powershell
+$savedReview = python -m agency_review save examples/synthetic_agency | ConvertFrom-Json
+$savedReview
+python -m agency_review list
+python -m agency_review open $savedReview.review_id --output outputs/reopened-demo
+```
+
+After `save`, confirm `status` is `saved` before running `open`. The save response includes the full review ID, saved location, original UTC creation time, project/finding counts, and `reused`. An identical save returns `reused: true` and does not create a duplicate review. Use a new output directory when reopening again; reports are never overwritten.
+
+If you reopen VS Code and lose the `$savedReview` variable, run `python -m agency_review list`, copy a full `review_id`, then use it in place of the variable. For example, the general syntax is:
+
+```sh
+python -m agency_review save PATH_TO_BUNDLE --store PATH_TO_STORE
+python -m agency_review list --store PATH_TO_STORE
+python -m agency_review open FULL_REVIEW_ID --store PATH_TO_STORE --output NEW_OUTPUT_FOLDER
+```
+
+`open` does not launch a browser or editor. It verifies retained files and exports the original `report.json` and `report.md` into the new folder. Open the Markdown file in VS Code and press **Ctrl+Shift+V** to preview it. No financial recalculation, input import, or Markdown regeneration occurs on reopening, even if the original input folder no longer exists.
+
+`list` returns JSON with `reviews`, `unavailable`, and `pending_count`. Listed metadata has `integrity: "not_checked"`; full hash verification happens on `open` or reuse. A corrupted record can appear in a metadata listing but will be blocked on reopening. Invalid metadata is listed separately rather than hiding valid reviews. Pending directories are never presented as completed reviews or automatically removed.
+
+All three commands accept `--store`; the default is relative to the repository installation, not the current working directory. Keep custom stores outside public version control. Input, store, and export directories must satisfy the separation rules in [storage.md](storage.md). Saved reviews remain plaintext local files; no records are uploaded or encrypted by this application.
+
+Command successes exit 0 with a JSON summary. Storage/input/I/O failures exit 1 with a structured error, and argument errors exit 2. A listing can succeed with unavailable entries: inspect that field. Use each command's `--help` for its arguments. If a legacy input folder is literally named `save`, `list`, or `open`, prefix it with `./` to distinguish it from a subcommand.
+
+Storage format/versioning, exact retained contents, interrupted writes, duplicate handling, file limits, and manual deletion are documented in [storage.md](storage.md). This increment does not add a review database, model, dashboard, automatic migrations, partial project recovery, or multi-user service.

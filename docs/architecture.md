@@ -1,6 +1,6 @@
 # Architecture and implementation sequence
 
-Status: the CSV validation, calculation, deterministic finding, and Markdown/JSON reporting stages are implemented as a local CLI. The API, model runner, database, and UI below remain design work.
+Status: the CSV validation, calculation, deterministic finding, and Markdown/JSON reporting stages are implemented as a local CLI. Saved source snapshots and reports are now retained in a local filesystem store. The API, model runner, database, and UI below remain design work.
 
 ## Implemented CLI boundary
 
@@ -11,12 +11,16 @@ Run `python -m agency_review`; see [cli.md](cli.md) for the supported input/outp
 | `agency_review/data.py` | Bounded reads, manifest/assertion checks, canonical parsing, relationship validation, input hashes and record locations. |
 | `agency_review/calculations.py` | Shared Decimal calculations and per-entry/per-invoice breakdowns. |
 | `agency_review/reporting.py` | Metric evidence catalog, conservative deterministic findings, escaped Markdown rendering and versioned JSON report structure. |
-| `agency_review/cli.py` | Local orchestration, structured errors, exclusive output creation and completion summary. |
+| `agency_review/cli.py` | Backward-compatible report command and dispatch to saved-review commands. |
+| `agency_review/storage.py` | Captured input retention, staged publication, snapshot identity, metadata listing, full integrity verification, and byte-exact export. |
+| `agency_review/saved_cli.py` | Save/list/open argument handling and structured command results. |
 | `scripts/validate_examples.py` | Synthetic-only answer-key verification using the shared calculation library; answer keys never enter the report path. |
 
-Execution is synchronous: load → validate → calculate → assemble evidence/findings → render → write. There are no model calls, background workers, external side effects, or persisted state transitions. A failed import blocks the entire report. Files are read into memory; their hashes and versioned snapshot ID provide repeatability, not a database or full immutable import store. Stable metric IDs are scoped to a snapshot. Identical inputs can be rerun into a fresh output folder; no existing folder is overwritten.
+Execution is synchronous: load → validate → calculate → assemble evidence/findings → render → write. There are no model calls, background workers, or external side effects. A failed import blocks the entire report. Files are read into memory with their exact source bytes. The optional save command retains those bytes, schema, report, and metadata in a versioned filesystem snapshot. Staging directories are published only after all files are written; this is not the future persisted state-machine controller. Stable metric IDs are scoped to a snapshot. Identical saved snapshots are verified and reused; existing export folders are never overwritten.
 
-Application records currently use a `Bundle` dataclass with validated dictionaries and Decimal/date values. Fully typed domain entities, project-level partial error recovery, persisted run lifecycle, cancellation, and import deduplication are deferred. Keep these explicit boundaries when adding the API; do not represent the CLI as completing those features.
+Application records currently use a `Bundle` dataclass with validated dictionaries and Decimal/date values. Fully typed domain entities, project-level partial error recovery, an editable persisted run lifecycle, and cancellation are deferred. Completed snapshot deduplication and reopening are implemented, but row-level import deduplication and resuming a partly executed review are not. Keep these explicit boundaries when adding the API; do not represent the CLI as completing those features.
+
+See [storage.md](storage.md) for the implemented retention and publication contract. The SQLite persistence choice below applies to future interactive review state; completed reports currently use versioned filesystem directories.
 
 ## Components and ownership of decisions
 
@@ -72,7 +76,8 @@ If baseline errors show a repeatable need, evaluate quantized adapter training (
 | --- | --- | --- |
 | 1 — merged foundation | Scope, research, rules, canonical CSVs/templates, worked answers, verifier, tests, CI | Reviewable assumptions and passing fixture checks |
 | 2 — CSV report pipeline | Shared import/calculation modules, structured errors, input fingerprints, metric evidence, Markdown/JSON reports | Original expected values pass through shared code; CLI rejects invalid bundles and reports supported examples |
-| 2b — persistent review lifecycle | Typed domain entities, retained input snapshots, project-level blockers, saved runs and deduplication | Reopen a review without mixing snapshots; distinguish fatal errors from usable partial results |
+| 2b — saved reviews | Retained source bytes, stored reports, metadata listing, verified reopening, completed snapshot deduplication | Reopen identical reports after removing originals; corrupt/incomplete records cannot silently substitute data |
+| 2c — interactive lifecycle foundation | Typed domain entities, project-level blockers, editable review state and partial recovery | Distinguish fatal errors from usable project results and persist unresolved review work |
 | 3 — review API and minimal UI | Create/reopen review, upload/mapping screens, deterministic findings, evidence links | Complete local workflow without an LLM |
 | 4 — local LLM investigation | Model adapter, read-only tools, constrained state machine, questions, structured output | Evidence/cutoff tests and reproducible baseline results |
 | 5 — vendor adapter and release | One tested export path, installation, cancellation/recovery, documentation, sample review | Reproducible fresh-machine installation and measured hardware report |
