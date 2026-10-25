@@ -1,4 +1,4 @@
-name: Foundation checks
+name: Agency review checks
 
 on:
   pull_request:
@@ -10,13 +10,17 @@ permissions:
 
 jobs:
   validate:
-    name: Validate fixtures (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    name: Validate and report (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         python-version: ['3.11', '3.12', '3.13']
+        include:
+          - os: windows-latest
+            python-version: '3.12'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-10-23
         with:
@@ -26,5 +30,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Verify synthetic records and expected calculations
         run: python scripts/validate_examples.py
-      - name: Check validation and cutoff behavior
+      - name: Check calculations, evidence, and CLI behavior
         run: python -m unittest discover -s tests -v
+      - name: Generate demonstration report
+        run: python -m agency_review examples/synthetic_agency --output outputs/ci-review

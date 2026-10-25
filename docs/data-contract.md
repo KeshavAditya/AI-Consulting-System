@@ -2,6 +2,8 @@
 
 The canonical bundle is a **developer-facing normalized format**. Users should eventually upload their existing exports and confirm mappings in a UI; they should not be expected to maintain twelve linked spreadsheets manually. No vendor adapter is implemented yet.
 
+The [CLI](cli.md) now accepts this format for experimental reports. Non-synthetic bundles require the explicit review assertions described there. The synthetic verifier retains its separate answer-key checks.
+
 ## Files
 
 `schemas/csv-contract.json` defines column names/order, primitive types, nullability, enums, and foreign keys. It is a small project-specific CSV contract, **not JSON Schema**. [field-dictionary.md](field-dictionary.md) lists every column. `templates/` holds header-only CSVs; `examples/synthetic_agency/` contains populated originals.
@@ -58,4 +60,4 @@ Future extracted passages must preserve document hash, page/section or line span
 
 ## Failure handling
 
-The fixture checker intentionally fails the entire bundle on structural or semantic inconsistency. The application should instead distinguish fatal import errors from project-level blockers and warnings, display affected records, and allow correction. A skipped file must be prominently disclosed. Unsupported billing models or tax/credit cases must not be coerced into the nearest supported type.
+The fixture checker and initial reporting CLI intentionally fail the entire bundle on structural or semantic inconsistency. The future interactive application should instead distinguish fatal import errors from project-level blockers and warnings, display affected records, and allow correction. A skipped file must be prominently disclosed. Unsupported billing models or tax/credit cases must not be coerced into the nearest supported type.
