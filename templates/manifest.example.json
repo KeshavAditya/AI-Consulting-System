@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1",
+  "dataset_id": "replace-with-your-review-id",
+  "synthetic": false,
+  "currency": "USD",
+  "as_of": "YYYY-MM-DD",
+  "coverage_start": "YYYY-MM-DD",
+  "coverage_end": "YYYY-MM-DD",
+  "tables": [
+    "projects",
+    "people",
+    "cost_rates",
+    "time_entries",
+    "expenses",
+    "invoices",
+    "invoice_lines",
+    "billing_links",
+    "payments",
+    "payment_allocations",
+    "credits",
+    "credit_allocations"
+  ],
+  "documents": [
+    "agreements.md"
+  ],
+  "source_coverage": "Describe which systems, projects, and periods were reviewed.",
+  "rounding": "ROUND_HALF_UP; money per entry to cents; cost uses recorded hours; price uses billing_hours",
+  "assumptions": [
+    "Document the reviewed scope and any limitations."
+  ],
+  "review_assertions": {
+    "complete_project_costs": false,
+    "complete_billing_and_settlements": false,
+    "reviewed_billing_links": false,
+    "snapshot_at_cutoff": false,
+    "supported_transactions_only": false
+  }
+}

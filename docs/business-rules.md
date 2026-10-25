@@ -1,6 +1,6 @@
 # Business rules v0.1
 
-These rules define management review semantics for the proposed product. They are not universal accounting standards. Source IDs refer to [research.md](research.md). `Implemented` below means exercised in the synthetic verifier, not available in a deployed application.
+These rules define management review semantics for the proposed product. They are not universal accounting standards. Source IDs refer to [research.md](research.md). `Implemented` below refers to the shared calculation library exercised by the synthetic verifier and experimental local reporting CLI, not a deployed service.
 
 ## Arithmetic and eligibility
 
@@ -11,7 +11,7 @@ These rules define management review semantics for the proposed product. They ar
 | R03 | Delivery cost = labor cost + direct project expenses, without counting contractor labor both ways. | Project cost model. | Sum implemented; detecting a real duplicate contractor bill is deferred. |
 | R04 | Hourly priced work = approved billable billing-hours × confirmed rates. Unapproved/nonbillable work is excluded from priced work, not from cost. | S06, S08; confirmed terms requirement is our policy. | Implemented on normalized records. |
 | R05 | Confirmed invoice links override a stale billed flag. Link coverage is quantitative; a flag alone never proves which work was billed. | S06–S07. | Implemented; links in examples are supplied as reviewed evidence. |
-| R06 | Eligible uninvoiced hourly work = eligible priced work minus confirmed covered work. Unknown coverage is a reconciliation question, not an instruction to invoice. | Project decision from S06–S07. | Candidate arithmetic implemented; source completeness is an explicit assumption. |
+| R06 | Eligible uninvoiced hourly work = eligible priced work minus confirmed covered work. Unknown coverage is a reconciliation question, not an instruction to invoice. | Project decision from S06–S07. | Candidate arithmetic and conservative report actions implemented; source completeness remains a supplied assertion. |
 | R07 | Extra hours on fixed-fee work indicate cost variance, not automatically extra billable revenue. Changes need agreement/approval evidence. | S01, S08. | Fixed fee used as pricing basis; text interpretation deferred. |
 | R08 | Invoice balance = issued invoice total minus valid payment allocations minus valid credit allocations at cutoff. | S10 and allocation model. | Implemented; overallocations reject the bundle. |
 | R09 | Days overdue = max(0, cutoff − due date), only for a positive balance on an issued invoice. Due today = 0. | Project date convention. | Implemented. |
@@ -20,7 +20,7 @@ These rules define management review semantics for the proposed product. They ar
 | R12 | Project delivery margin = (named pricing basis − direct delivery cost) / pricing basis. Excludes overhead; zero basis means undefined percentage. | Project management metric, not reported net profit. | Implemented; zero basis returns null. |
 | R13 | Known credits reducing this project's price reduce its net pricing basis. Settlement allocation is separate from price attribution. | Project decision informed by S10. | Explicit credit project ID and pre-tax amount used. Unknown price attribution deferred. |
 | R14 | Blank/unknown is not zero. Mixed currencies, bad links, duplicates, malformed numbers, and inconsistent totals block affected calculations. | S11, S14; data integrity. | Strict fixture checks implemented; partial production results deferred. |
-| R15 | An overrun is a fact; scope creep, estimation error, and rework are possible causes requiring evidence. | Evidence discipline. | Expected narratives specify questions; no causal inference engine yet. |
+| R15 | An overrun is a fact; scope creep, estimation error, and rework are possible causes requiring evidence. | Evidence discipline. | Report actions ask for evidence; no causal inference engine. |
 | R16 | Keep immutable facts/calculations separate from model proposals and user dispositions. External document text is data, never tool authority. | S15. | Architectural requirement; no model/tool execution in this PR. |
 
 ## Exact conventions for the fixtures
