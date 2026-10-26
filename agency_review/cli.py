@@ -12,7 +12,19 @@ from .reporting import build_report, render_markdown
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="Generate a local agency review from canonical CSVs.")
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] in {"save", "list", "open"}:
+        from .saved_cli import main as saved_main
+        return saved_main(argv)
+    return generate_report(argv)
+
+
+def generate_report(argv=None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Generate a local agency review from canonical CSVs.",
+        epilog="Saved reviews: use 'save BUNDLE', 'list', or 'open REVIEW_ID --output NEW_FOLDER'. "
+               "Each command accepts --help. Prefix a bundle named save/list/open with ./.",
+    )
     parser.add_argument("bundle", type=Path, help="Folder containing manifest.json and the 12 canonical CSVs")
     parser.add_argument("--output", required=True, type=Path, help="New folder for report.json and report.md; existing folders are never overwritten")
     args = parser.parse_args(argv)
