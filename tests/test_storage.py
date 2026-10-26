@@ -235,7 +235,7 @@ class StorageTests(unittest.TestCase):
 
     def test_export_failure_removes_its_partial_files(self):
         saved = self.save().review
-        output = self.root / "export"
+        output = (self.root / "export").resolve()
         original = Path.open
         def fail(path, *args, **kwargs):
             if path == output / "report.md":
