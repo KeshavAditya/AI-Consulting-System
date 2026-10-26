@@ -8,6 +8,7 @@ Run `python -m agency_review`; see [cli.md](cli.md) for the supported input/outp
 
 | Module | Implemented responsibility |
 | --- | --- |
+| `agency_review/issues.py` | Versioned diagnostic fields, exception context, and additive CLI error payloads. |
 | `agency_review/data.py` | Bounded reads, manifest/assertion checks, canonical parsing, relationship validation, input hashes and record locations. |
 | `agency_review/calculations.py` | Shared Decimal calculations and per-entry/per-invoice breakdowns. |
 | `agency_review/reporting.py` | Metric evidence catalog, conservative deterministic findings, escaped Markdown rendering and versioned JSON report structure. |
@@ -16,7 +17,7 @@ Run `python -m agency_review`; see [cli.md](cli.md) for the supported input/outp
 | `agency_review/saved_cli.py` | Save/list/open argument handling and structured command results. |
 | `scripts/validate_examples.py` | Synthetic-only answer-key verification using the shared calculation library; answer keys never enter the report path. |
 
-Execution is synchronous: load → validate → calculate → assemble evidence/findings → render → write. There are no model calls, background workers, or external side effects. A failed import blocks the entire report. Files are read into memory with their exact source bytes. The optional save command retains those bytes, schema, report, and metadata in a versioned filesystem snapshot. Staging directories are published only after all files are written; this is not the future persisted state-machine controller. Stable metric IDs are scoped to a snapshot. Identical saved snapshots are verified and reused; existing export folders are never overwritten.
+Execution is synchronous: load → validate → calculate → assemble evidence/findings → render → write. There are no model calls, background workers, or external side effects. A failed import blocks the entire report. Validation failures now carry explicit rule codes and file/record/field locations where known; the CLI exposes one issue at a time. Diagnostic project attribution is conservative and does not enable partial calculation. See [validation-issues.md](validation-issues.md). Files are read into memory with their exact source bytes. The optional save command retains those bytes, schema, report, and metadata in a versioned filesystem snapshot. Staging directories are published only after all files are written; this is not the future persisted state-machine controller. Stable metric IDs are scoped to a snapshot. Identical saved snapshots are verified and reused; existing export folders are never overwritten.
 
 Application records currently use a `Bundle` dataclass with validated dictionaries and Decimal/date values. Fully typed domain entities, project-level partial error recovery, an editable persisted run lifecycle, and cancellation are deferred. Completed snapshot deduplication and reopening are implemented, but row-level import deduplication and resuming a partly executed review are not. Keep these explicit boundaries when adding the API; do not represent the CLI as completing those features.
 
@@ -77,7 +78,8 @@ If baseline errors show a repeatable need, evaluate quantized adapter training (
 | 1 — merged foundation | Scope, research, rules, canonical CSVs/templates, worked answers, verifier, tests, CI | Reviewable assumptions and passing fixture checks |
 | 2 — CSV report pipeline | Shared import/calculation modules, structured errors, input fingerprints, metric evidence, Markdown/JSON reports | Original expected values pass through shared code; CLI rejects invalid bundles and reports supported examples |
 | 2b — saved reviews | Retained source bytes, stored reports, metadata listing, verified reopening, completed snapshot deduplication | Reopen identical reports after removing originals; corrupt/incomplete records cannot silently substitute data |
-| 2c — interactive lifecycle foundation | Typed domain entities, project-level blockers, editable review state and partial recovery | Distinguish fatal errors from usable project results and persist unresolved review work |
+| 2c.1 — structured validation issues | Located first-error diagnostics for report/save, conservative project attribution, unchanged fail-closed behavior | Invalid inputs give stable codes and actionable locations without creating reports or saved snapshots |
+| 2c.2 — interactive lifecycle foundation | Typed domain entities, project-level blockers, editable review state and partial recovery | Distinguish fatal errors from usable project results and persist unresolved review work |
 | 3 — review API and minimal UI | Create/reopen review, upload/mapping screens, deterministic findings, evidence links | Complete local workflow without an LLM |
 | 4 — local LLM investigation | Model adapter, read-only tools, constrained state machine, questions, structured output | Evidence/cutoff tests and reproducible baseline results |
 | 5 — vendor adapter and release | One tested export path, installation, cancellation/recovery, documentation, sample review | Reproducible fresh-machine installation and measured hardware report |

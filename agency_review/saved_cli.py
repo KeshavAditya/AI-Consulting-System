@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from .data import ValidationError
+from .issues import error_payload
 from .storage import DEFAULT_STORE, StorageError, export_review, list_reviews, save_review, store_root
 
 
@@ -41,12 +42,12 @@ def main(argv=None) -> int:
         if isinstance(exc, StorageError):
             code, message = "storage_error", str(exc)
         elif isinstance(exc, ValidationError):
-            code, message = "validation_error", str(exc)
+            code, message = exc.category, str(exc)
         elif isinstance(exc, (ValueError, csv.Error, RecursionError)):
             code, message = "parse_error", "Invalid UTF-8, CSV, or JSON input; see docs/cli.md."
         else:
             code, message = "file_error", "Unable to read or write local review files; check locations, permissions, and disk space."
-        print(json.dumps({"status": "blocked", "code": code, "message": message}), file=sys.stderr)
+        print(json.dumps(error_payload(exc, code, message)), file=sys.stderr)
         return 1
     print(json.dumps(payload, ensure_ascii=True, allow_nan=False))
     return 0

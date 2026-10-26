@@ -76,8 +76,27 @@ The snapshot ID hashes the consumed file hashes, cutoff, report version, and rul
 Success prints a JSON summary to stdout and exits 0. A blocked run prints one JSON error to stderr and exits 1. Argument usage errors exit 2. Example:
 
 ```json
-{"status": "blocked", "code": "validation_error", "message": "expenses:record 2:amount: invalid money"}
+{
+  "status": "blocked",
+  "code": "validation_error",
+  "message": "expenses:record 2:amount: invalid money",
+  "issue_version": "1",
+  "issues": [{
+    "code": "invalid_number",
+    "message": "expenses:record 2:amount: invalid money",
+    "file": "expenses.csv",
+    "record": 2,
+    "field": "amount",
+    "record_id": "X01",
+    "project_id": "P01",
+    "blocking_scope": "bundle"
+  }]
+}
 ```
+
+Input validation, parsing, and read failures now include `issue_version: "1"` and a one-item `issues` array. Existing top-level `status`, `code`, `message`, and exit codes remain available. Report generation and `save` use the same input diagnostics. Consumers should tolerate new fields/codes and null locations. Storage verification errors and output I/O failures do not gain input locations. Output precondition errors may carry a generic `invalid_input` issue with null locations.
+
+A project ID provides context only: every issue still blocks the entire bundle. The command stops at the first error, so fix it and rerun; it does not aggregate all issues or produce partial project results. See [the diagnostic contract](validation-issues.md) for attribution rules and logical record numbers.
 
 The command blocks missing files/values, inconsistent totals, invalid relationships, malformed input, unsupported assertions, and existing output directories. Files are limited to 2 MB each, tables to 10,000 records each, documents to 20 files, text cells to 4,096 characters, and assumptions to 50 entries. Files must be local basenames; symlink inputs and Windows/POSIX path traversal are rejected. The parser is non-executing and does not fetch links or evaluate spreadsheet formulas.
 
