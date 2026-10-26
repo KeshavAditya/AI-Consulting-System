@@ -41,7 +41,7 @@ def main(argv=None) -> int:
         if isinstance(exc, StorageError):
             code, message = "storage_error", str(exc)
         elif isinstance(exc, ValidationError):
-            code, message = "validation_error", str(exc)
+            code, message = exc.category, str(exc)
         elif isinstance(exc, (ValueError, csv.Error, RecursionError)):
             code, message = "parse_error", "Invalid UTF-8, CSV, or JSON input; see docs/cli.md."
         else:

@@ -64,7 +64,7 @@ def generate_report(argv=None) -> int:
             except OSError:
                 pass
         if isinstance(exc, ValidationError):
-            code, message = "validation_error", str(exc)
+            code, message = exc.category, str(exc)
         elif isinstance(exc, (UnicodeError, csv.Error, json.JSONDecodeError, RecursionError)):
             code, message = "parse_error", "Invalid UTF-8, CSV, or JSON input; check the canonical format in docs/cli.md."
         else:
