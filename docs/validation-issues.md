@@ -39,3 +39,9 @@ Rule identifiers are explicit in the validator. They cover cell types/required v
 - Business rules: `cost_rate_unavailable`, `rate_interval`, `daily_hours_limit`, `invoice_total`, `invoice_line_total`, `source_overallocated`, `invoice_overallocated`.
 
 Consumers must handle unknown codes and null location fields. New rule identifiers may be added without changing existing identifiers. Diagnostic details do not change report version `0.1`, calculation rule version `0.2.0`, snapshot identities, or saved-review format. Valid inputs produce the same reports as before.
+
+## CLI contract (version 1)
+
+Report generation and `save` add `issue_version: "1"` and `issues: [issue]` to input-error responses on stderr. The existing top-level `status`, `code`, and `message` are retained, and blocked runs still exit 1. The array contains exactly the first encountered issue, not a comprehensive validation result. Success output/report files and usage errors (exit 2) are unchanged.
+
+Storage errors from `open`, duplicate-save verification, or store path checks remain `storage_error` without an input issues array. Output I/O errors keep their previous format; generic report output precondition errors can have a location-free `invalid_input` issue. Do not assume every failure is a bad CSV cell.

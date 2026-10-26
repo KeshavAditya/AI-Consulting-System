@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from .data import ValidationError, load_bundle
+from .issues import error_payload
 from .reporting import build_report, render_markdown
 
 
@@ -69,7 +70,7 @@ def generate_report(argv=None) -> int:
             code, message = "parse_error", "Invalid UTF-8, CSV, or JSON input; check the canonical format in docs/cli.md."
         else:
             code, message = "file_error", "Unable to read inputs or write reports; check file locations, permissions, and whether the output already exists."
-        print(json.dumps({"status": "blocked", "code": code, "message": message}), file=sys.stderr)
+        print(json.dumps(error_payload(exc, code, message)), file=sys.stderr)
         return 1
     print(json.dumps({"status": "completed", "snapshot_id": report["snapshot_id"],
                       "projects": len(report["projects"]), "findings": len(report["findings"]),

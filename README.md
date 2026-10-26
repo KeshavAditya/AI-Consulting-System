@@ -27,6 +27,8 @@ Open `outputs/demo-review/report.md` in VS Code and press **Ctrl+Shift+V** to pr
 
 The demonstration flags a USD 1,200 billing candidate, a USD 4,000 cost overrun, and a USD 5,000 overdue balance. These are different review categories, **not additive recoveries**. Explanations and next steps are deterministic rules; no LLM is running.
 
+Validation failures include a rule code and file, logical record, field, and project context where known. The first error still blocks the whole review; [structured diagnostics](docs/validation-issues.md) explain how to locate and correct it.
+
 See [CLI usage, input requirements, and output contract](docs/cli.md) before preparing your own records. Non-synthetic inputs require explicit completeness and supported-transaction assertions. This is an experimental developer-facing workflow, not a verified accounting integration.
 
 ## Save and reopen a review
