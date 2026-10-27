@@ -6,6 +6,8 @@ import json
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, replace
 
+from .impact import ValidationImpact
+
 ISSUE_VERSION = "1"
 
 
@@ -32,6 +34,7 @@ class ValidationError(ValueError):
         super().__init__(message)
         self.issue = ValidationIssue(code=code, message=message, **location)
         self.category = category
+        self.impact = ValidationImpact()
 
 
 @contextmanager

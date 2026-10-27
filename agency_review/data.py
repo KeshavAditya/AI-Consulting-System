@@ -13,6 +13,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 from .issues import ValidationError, issue_context
+from .impact import _classify_domain_impact
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BUNDLE = ROOT / "examples" / "synthetic_agency"
@@ -308,6 +309,18 @@ def validate(bundle: Bundle) -> None:
                             require(value in bundle.index(column["references"]), f"dangling foreign key: {table}.{column['name']}={value}", code="missing_reference")
                         if column["type"] == "evidence":
                             resolve_evidence(bundle, value)
+    # A row's diagnostic project_id is not a safe impact bound. Classify only
+    # after ALL identities, relationships and evidence references are trusted.
+    # Every error still blocks load/report/save; no rows are filtered here.
+    try:
+        _validate_business_rules(bundle)
+    except ValidationError as exc:
+        exc.impact = _classify_domain_impact(bundle, exc.issue)
+        raise
+
+
+def _validate_business_rules(bundle: Bundle) -> None:
+    t = bundle.tables
     projects, entries, invoices, lines = (bundle.index(n) for n in ("projects", "time_entries", "invoices", "invoice_lines"))
     require(bool(projects), "at least one project is required", code='projects_required', file="projects.csv")
     cutoff = parse_day(bundle.manifest["as_of"])
