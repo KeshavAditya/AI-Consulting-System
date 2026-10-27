@@ -1,5 +1,9 @@
 # Structured validation issues
 
+Internal Python errors also carry a separate [impact assessment](validation-impact.md)
+for supported business-rule failures after structural validation. This does not
+change the version-1 diagnostic payload or its whole-bundle blocking behavior.
+
 This increment attaches machine-readable diagnostics to input validation failures. It still stops at the first error and blocks the entire review. It does not return partial calculations, collect every error, edit inputs, or resume an interrupted review.
 
 ## Python contract
